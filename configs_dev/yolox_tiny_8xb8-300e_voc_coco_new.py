@@ -55,3 +55,6 @@ train_dataset = dict(dataset=dict(ann_file='VOC_coco/voc07_train_person_car.json
 train_dataloader = dict(dataset=train_dataset)
 val_dataloader = dict(dataset=dict(pipeline=test_pipeline, ann_file='VOC_coco/voc07_val_person_car.json',))
 test_dataloader = val_dataloader
+
+resume = True
+load_from = "/home/hs/Documents/mmdetection/work_dirs/yolox_tiny_8xb8-300e_voc_coco_new/epoch_60.pth"
