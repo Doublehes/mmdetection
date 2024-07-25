@@ -47,10 +47,11 @@ def plot_curve(log_dicts, args):
     assert len(legend) == (len(args.json_logs) * len(args.keys))
     metrics = args.keys
 
+    plt.figure(figsize=(20, 15))
     # TODO: support dynamic eval interval(e.g. RTMDet) when plotting mAP.
     num_metrics = len(metrics)
     for i, log_dict in enumerate(log_dicts):
-        epochs = list(log_dict.keys())
+        epochs = [e for e in log_dict.keys() if e >= args.start_epoch]
         for j, metric in enumerate(metrics):
             print(f'plot curve of {args.json_logs[i]}, metric is {metric}')
             if metric not in log_dict[epochs[int(args.eval_interval) - 1]]:
@@ -113,9 +114,9 @@ def add_plot_parser(subparsers):
         default=['bbox_mAP'],
         help='the metric that you want to plot')
     parser_plt.add_argument(
-        '--start-epoch',
-        type=str,
-        default='1',
+        '--start_epoch',
+        type=int,
+        default=1,
         help='the epoch that you want to start')
     parser_plt.add_argument(
         '--eval-interval',
