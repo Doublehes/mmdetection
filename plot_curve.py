@@ -50,13 +50,20 @@ def plot_curve(log_dicts: dict, args: Args):
         for j, metric in enumerate(metrics):
             print(f'plot curve of {args.json_logs[i]}, metric is {metric}')
 
-            if 'mAP' in metric:
+            if 'AP' in metric:
                 xs = []
                 ys = []
                 for epoch in epochs:
                     ys += log_dict[epoch][metric]
                     if log_dict[epoch][metric]:
                         xs += [epoch]
+                # print(f"metric: {metric}, len(xs): {len(xs)}, len(ys): {len(ys)}")
+                if len(xs) != len(ys):
+                    print(f'metric {metric} has different length of iters and values')
+                    continue
+                if len(xs) == 0:
+                    print(f'metric {metric} has no value')
+                    continue
                 plt.xlabel('epoch')
                 plt.plot(xs, ys, label=legend[i * num_metrics + j], marker='o')
             else:
@@ -68,12 +75,15 @@ def plot_curve(log_dicts: dict, args: Args):
                     ys.append(np.array(log_dict[epoch][metric][:len(iters)]))
                 xs = np.concatenate(xs)
                 ys = np.concatenate(ys)
+                # print(f"metric: {metric}, len(xs): {len(xs)}, len(ys): {len(ys)}")
+                if len(xs) != len(ys):
+                    print(f'metric {metric} has different length of iters and values')
+                    continue
                 plt.xlabel('iter')
-                plt.plot(
-                    xs, ys, label=legend[i * num_metrics + j], linewidth=0.5)
-            plt.legend()
-        if args.title is not None:
-            plt.title(args.title)
+                plt.plot(xs, ys, label=legend[i * num_metrics + j], linewidth=0.5)
+    plt.legend()
+    if args.title is not None:
+        plt.title(args.title)
 
     print(f'save curve to: {args.out}')
     plt.savefig(args.out)
@@ -110,9 +120,17 @@ if __name__ == '__main__':
     plot_curve(log_dicts, lr_args)
 
     mAP_args = Args(json_logs,
-                    keys=['bbox_mAP'],
-                    legend=['bbox_mAP'],
+                    keys=['bbox_mAP', 'mAP', 'AP50', 'AP75'],
+                    legend=['bbox_mAP', 'mAP', 'AP50', 'AP75'],
                     title='mAP Curve',
                     out=os.path.join(out_dir, 'mAP.png')
+                    )
+    plot_curve(log_dicts, mAP_args)
+
+    mAP_args = Args(json_logs,
+                    keys=['AP50_small', 'AP50_medium', 'AP50_large'],
+                    legend=['AP50_small', 'AP50_medium', 'AP50_large'],
+                    title='AP Curve',
+                    out=os.path.join(out_dir, 'AP.png')
                     )
     plot_curve(log_dicts, mAP_args)
