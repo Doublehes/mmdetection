@@ -145,7 +145,7 @@ train_cfg = dict(max_epochs=30)
 # val_cfg = None
 
 default_hooks = dict(
-    logger=dict(interval=10),
+    logger=dict(interval=1),
     visualization=dict(score_thr=0.3),
     checkpoint=dict(
         interval=1,

@@ -134,3 +134,11 @@ if __name__ == '__main__':
                     out=os.path.join(out_dir, 'AP.png')
                     )
     plot_curve(log_dicts, mAP_args)
+
+    grad_args = Args(json_logs,
+                        keys=['grad_norm'],
+                        legend=['grad_norm'],
+                        title='Grad Norm Curve',
+                        out=os.path.join(out_dir, 'grad_norm.png')
+                        )
+    plot_curve(log_dicts, grad_args)

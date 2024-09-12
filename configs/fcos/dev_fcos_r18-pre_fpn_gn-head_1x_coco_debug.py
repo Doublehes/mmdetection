@@ -155,7 +155,7 @@ test_evaluator = val_evaluator
 train_cfg = dict(max_epochs=30)
 
 default_hooks = dict(
-    logger=dict(interval=50),
+    logger=dict(interval=1),
     checkpoint=dict(
         interval=1,
         max_keep_ckpts=3  # only keep latest 3 checkpoints
